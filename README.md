@@ -5,8 +5,9 @@
 
 ## Pretrained Models
 You can download two pretrained CeNiN models. These are actually two of VGG16 models of Oxford Visual Geometry Group. Parameters of those models are stored in ".cenin" files that allow millions of parameters to be loaded into memory quickly under .NET framework.  
-- [imagenet-matconvnet-vgg-f.cenin (19 layers)](models/imagenet-matconvnet-vgg-f.cenin)
-- [imagenet-vgg-verydeep-16.cenin (37 layers)](models/imagenet-vgg-verydeep-16.cenin)
+- [imagenet-matconvnet-vgg-f.cenin (19 layers)](https://drive.google.com/file/d/12Z0zkcLFMAvReBYomj1thrU-Aj1EJYKZ/view?usp=sharing
+)
+- [imagenet-vgg-verydeep-16.cenin (37 layers)](https://drive.google.com/file/d/1t3Z3v1D625fByha19avQpNEiJm1AI-fD/view?usp=sharing)
 
 ## Performance
 The most time-consuming layers are convolution layers. The other layers are fast enough without extra optimization.  
