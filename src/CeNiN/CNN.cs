@@ -40,9 +40,9 @@ namespace CeNiN
         public int totalWeightCount;
         public int totalBiasCount;
 
+        public Layer[] layers;
         public InputLayer inputLayer;
-
-        private Layer[] layers;
+        public Output outputLayer;
 
         public CNN(string path)
         {
@@ -144,10 +144,10 @@ namespace CeNiN
 
                         SoftMax smLayer = new SoftMax(currentLayer.outputDims);
                         currentLayer.appendNext(smLayer);
-                        Output oLayer = new Output(smLayer.InputTensorDims, classes);
-                        smLayer.appendNext(oLayer);
+                        outputLayer = new Output(smLayer.InputTensorDims, classes);
+                        smLayer.appendNext(outputLayer);
                         layerList.Add(smLayer);
-                        layerList.Add(oLayer);
+                        layerList.Add(outputLayer);
                         continue;
                     }
                     else if (layerT.Equals("EOF"))
