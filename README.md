@@ -1,5 +1,5 @@
 # CeNiN
-**C**e**N**i**N** (means "fetus" in Turkish) is an implementation of feed-forward phase of deep **C**onvolutional **N**eural **N**etworks in pure C#. It doesn't require any external library and can be used in all programming languages supported by .NET.
+**C**e**N**i**N** (means "fetus" in Turkish) is a minimal implementation of feed-forward phase of deep **C**onvolutional **N**eural **N**etworks in pure C#. It doesn't require any external library and can be used in all programming languages supported by .NET.
 
 ![CeNiN screenshot](screenshot.png)
 
