@@ -24,7 +24,7 @@ You can implement new layer types inheriting *Layer* class. Structure of layers 
 - implementation of *feedNext()* function. This function should start with a call to  *outputTensorMemAlloc()* and end with a call to *disposeInputTensor()*. Note that there is no phsical output tensor, input of each layer is used as output of the previous layer.
 
 ## .cenin File Format
-This file format is structured so that it can be read under .NET framework using BinaryReader class very quickly. The structure is as follows (new lines are for representaion, there is no new line in cenin files. [] and {} also for representation of data and type):  
+This file format is structured so that it can be read under .NET framework using BinaryReader class very quickly. The structure is as follows (new lines are for representaion, there is no new line in cenin files. [] and {} also for representation of data and types):  
 ```
 CeNiN NEURAL NETWORK FILE   {string without an ending null char}
 [LayerCount]                {1 x int32}
@@ -33,7 +33,7 @@ CeNiN NEURAL NETWORK FILE   {string without an ending null char}
 For each layer in network:
 [LayerTypeStringLength]     {1 x byte (7-bit encoded int)}
 [LayerType]                 {string}
-[LayerParams]               {different numbers of params in different orders, please see *CNN()* constructor in CNN.cs}
+[LayerParams]               {different numbers of params in different orders, please see CNN() constructor in CNN.cs}
 ```
 
 ## Links
