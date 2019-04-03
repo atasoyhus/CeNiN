@@ -66,8 +66,8 @@ namespace CeNiN_CSharp_Example
             opf.Filter = "Image files|*.bmp;*.jpeg;*.jpg;*.png";
             if (opf.ShowDialog() != DialogResult.OK) return;
             Bitmap b = new Bitmap(opf.FileName);
-            pictureBox1.Image = b;
-            cnn.inputLayer.setInput(b);
+            cnn.inputLayer.setInput(b, Input.ResizingMethod.ZeroPad);
+            pictureBox1.Image = (Image)cnn.inputLayer.ResizedInputBmp.Clone();
             tic();
             Layer currentLayer = cnn.inputLayer;
             int i = 0;
@@ -87,9 +87,6 @@ namespace CeNiN_CSharp_Example
 
             Output outputLayer = (Output)currentLayer;
             prependLine("Finished in " + toc().ToString() + " seconds");
-
-            if (b.Width != b.Height)
-                prependLine("WARNING: Since aspect ratio of the network input is 1:1, the image was stretched and this may have affected the result negatively.");
 
             string decision = outputLayer.getDecision();
             string hLine = new string('-', 100);

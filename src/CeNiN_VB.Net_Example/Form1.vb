@@ -48,8 +48,8 @@ Public Class Form1
         opf.Filter = "Image files|*.bmp;*.jpeg;*.jpg;*.png"
         If opf.ShowDialog() <> DialogResult.OK Then Return
         Dim b As Bitmap = New Bitmap(opf.FileName)
-        PictureBox1.Image = b
-        cnn.inputLayer.setInput(b)
+        cnn.inputLayer.setInput(b, Input.ResizingMethod.ZeroPad)
+        PictureBox1.Image = cnn.inputLayer.ResizedInputBmp.Clone()
         Tic()
         Dim CurrentLayer As Layer = cnn.inputLayer
         Dim i As Integer = 0
@@ -69,10 +69,6 @@ Public Class Form1
 
         Dim OutputLayer As Output = CType(CurrentLayer, Output)
         PrependLine("Finished in " & Toc().ToString() & " seconds")
-
-        If b.Width <> b.Height Then
-            PrependLine("WARNING: Since aspect ratio of the network input is 1:1, the image was stretched and this may have affected the result negatively.")
-        End If
 
         Dim Decision As String = OutputLayer.getDecision()
         Dim HLine As String = New String("-"c, 100)

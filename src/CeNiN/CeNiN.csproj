@@ -41,7 +41,7 @@
     <Compile Include="Conv_2.cs" />
     <Compile Include="Conv_3.cs" />
     <Compile Include="Conv.cs" />
-    <Compile Include="InputLayer.cs" />
+    <Compile Include="Input.cs" />
     <Compile Include="Layer.cs" />
     <Compile Include="Output.cs" />
     <Compile Include="Pool.cs" />

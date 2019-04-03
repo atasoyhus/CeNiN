@@ -41,7 +41,7 @@ namespace CeNiN
         public int totalBiasCount;
 
         public Layer[] layers;
-        public InputLayer inputLayer;
+        public Input inputLayer;
         public Output outputLayer;
 
         public CNN(string path)
@@ -61,7 +61,7 @@ namespace CeNiN
                 for (int i = 0; i < 3; i++)
                     inputSize[i] = br.ReadInt32();
 
-                inputLayer = new InputLayer(inputSize);
+                inputLayer = new Input(inputSize);
                 inputLayer.layerCount = layerCount;
 
                 for (int i = 0; i < 3; i++)
@@ -87,7 +87,7 @@ namespace CeNiN
                         int[] pad = new int[4];
                         for (int i = 0; i < 4; i++)
                             pad[i] = br.ReadByte();
-
+                        
                         int[] inputTensorDims = currentLayer.outputDims;
                         Conv cLayer = new Conv(inputTensorDims, pad);
 

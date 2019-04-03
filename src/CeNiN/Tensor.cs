@@ -53,9 +53,7 @@ namespace CeNiN
 
         public Tensor(int[] dims)
         {
-            totalLength = 1;
-            for (int i = 0; i < dims.Length; i++)
-                totalLength *= dims[i];
+            totalLength = multAll(dims);
 
             this.dims = (int[])dims.Clone();
 
