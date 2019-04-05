@@ -3,6 +3,8 @@
 
 ![CeNiN screenshot](screenshot.png)
 
+There are two examples that illustrate how to use CeNiN in C# and VB.NET. You can find another one [here (**ImageTagger**)](https://www.codeproject.com/Articles/1360649/Image-Tagger-A-Convolutional-Neural-Network-Based).
+
 ## Pretrained Models
 You can download two pretrained CeNiN models. These are actually two of VGG16 models of Oxford Visual Geometry Group. Parameters of those models are stored in ".cenin" files that allow millions of parameters to be loaded into memory quickly under .NET framework.  
 - [imagenet-matconvnet-vgg-f.cenin (19 layers, 60824256  weights)](https://drive.google.com/file/d/12Z0zkcLFMAvReBYomj1thrU-Aj1EJYKZ/view?usp=sharing
@@ -24,7 +26,7 @@ You can implement new layer types inheriting *Layer* class. Structure of layers 
 - implementation of *feedNext()* function. This function should start with a call to  *outputTensorMemAlloc()* and end with a call to *disposeInputTensor()*. Note that there is no phsical output tensor, input of each layer is used as output of the previous layer.
 
 ## .cenin File Format
-This file format is structured so that it can be read under .NET framework using BinaryReader class very quickly. The structure is as follows (new lines are for representaion, there is no new line in cenin files. [] and {} also for representation of data and types):  
+This file format is structured so that it can be read under .NET framework using BinaryReader class very quickly. The structure is as follows (new lines are for representation, there is no new line in cenin files. [] and {} also for representation of data and types):  
 ```
 CeNiN NEURAL NETWORK FILE   {string without an ending null char}
 [LayerCount]                {1 x int32}
@@ -34,6 +36,7 @@ For each layer in network:
 [LayerTypeStringLength]     {1 x byte (7-bit encoded int)}
 [LayerType]                 {string}
 [LayerParams]               {different numbers of params in different orders, please see CNN() constructor in CNN.cs}
+EOF                         {string without an ending null char}
 ```
 
 ## Links
