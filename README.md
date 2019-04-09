@@ -25,9 +25,11 @@ Since backpropagation is not implemented yet, you can not train a model using th
 You can implement new layer types inheriting *Layer* class. Structure of layers is simple and the same in all layer types. The following three implementations are required for a new type:
 - a constructor that takes input dimensions (and also padding and/or stride parameters if required)
 - implementation of *setOutputDims()* function if dimensions of input and output tensors are different. If they are the same, this function has a default implemetation in *Layer* class.
-- implementation of *feedNext()* function. This function should start with a call to  *outputTensorMemAlloc()* and end with a call to *disposeInputTensor()*. Note that there is no physical output tensor, input of each layer is used as output of the previous layer.
+- implementation of *feedNext()* function. This function should start with a call to  *outputTensorMemAlloc()* and end with a call to *disposeInputTensor()*.
+
+Note that there is no output tensor definition in any layer. Input of each layer is used as output of previous layer.
  
-**Note that** tensors are padded before they are being filled to prevent performance decrements caused by cloning memory regions. For this reason *writeNextLayerInput()* should be preferred to write output of current layer especially if left or top padding value is not zero on next layer. This is the only function that takes care of padding while writing data into input tensor of next layers...
+Note also that tensors that require padding are padded before they are being filled to prevent performance decrements caused by cloning memory regions. For this reason *writeNextLayerInput()* should be preferred to write output of current layer especially if left or top padding value is not zero on next layer. This is the only function that takes care of padding while writing data into input tensor of next layers...
 
 Additionally you can find some function and operator definitions that may be useful while implementing new layer types, in *Tensor.cs*:
 - Tensor reshaping,
