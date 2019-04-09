@@ -72,7 +72,7 @@ namespace CeNiN
                     {
                         outputInd[1] = (int)Math.Floor((double)j / stride[1]);
 
-                        max = 0;
+                        max = float.MinValue;
                         for (inputInd[0] = i; inputInd[0] < i + poolHeight; inputInd[0]++)
                         {
                             for (inputInd[1] = j; inputInd[1] < j + poolWidth; inputInd[1]++)
