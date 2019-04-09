@@ -19,11 +19,23 @@ The most time-consuming layers are convolution layers. The other layers are fast
 ***Conv*:** The only difference between this and *Conv_3* is parallelization. This is faster than *Conv_3* only on multicore CPUs. It takes no more than 1-2 seconds to pass an image through all the layers using *Conv* or *Conv_3* on a single CPU core. A faster generalized matrix multiplication approach can make it even faster...
 
 ## Training Your Own Models
-Since backpropagation is not implemented yet, you can not train a model using this library. But if you have a trained model or want to train a model with another tool (like matconvnet) you can easily convert your trained model to a cenin file. CeNiN file structure is presented below. But there are some limitations because the implementation was kept as minimal as possible. (implemented layers: convolution, pool, relu, softmax)  
+Since backpropagation is not implemented yet, you can not train a model using this library. But if you have a trained model or want to train a model with another tool (like matconvnet) you can easily convert your trained model to a cenin file. CeNiN file structure is presented below. But there are some limitations because the implementation was kept as minimal as possible. (implemented layers: convolution, pool (max pooling only), relu, softmax)
+
+### Implementing New Layer Types
 You can implement new layer types inheriting *Layer* class. Structure of layers is simple and the same in all layer types. The following three implementations are required for a new type:
 - a constructor that takes input dimensions (and also padding and/or stride parameters if required)
 - implementation of *setOutputDims()* function if dimensions of input and output tensors are different. If they are the same, this function has a default implemetation in *Layer* class.
-- implementation of *feedNext()* function. This function should start with a call to  *outputTensorMemAlloc()* and end with a call to *disposeInputTensor()*. Note that there is no phsical output tensor, input of each layer is used as output of the previous layer.
+- implementation of *feedNext()* function. This function should start with a call to  *outputTensorMemAlloc()* and end with a call to *disposeInputTensor()*. Note that there is no physical output tensor, input of each layer is used as output of the previous layer.
+ 
+**Note that** tensors are padded before they are being filled to prevent performance decrements caused by cloning memory regions. For this reason *writeNextLayerInput()* should be preferred to write output of current layer especially if left or top padding value is not zero on next layer. This is the only function that takes care of padding while writing data into input tensor of next layers...
+
+Additionally you can find some function and operator definitions that may be useful while implementing new layer types, in *Tensor.cs*:
+- Tensor reshaping,
+- Tensor * Tensor (for rank-2 tensors only; generalized matrix multiplication),
+- Tensor * float,
+- Tensor + Tensor, Tensor - Tensor,
+- Tensor + float, Tensor - float
+- broadcasted sum (for rank-1 tensors only)
 
 ## .cenin File Format
 This file format is structured so that it can be read under .NET framework using BinaryReader class very quickly. The structure is as follows (new lines are for representation, there is no new line in cenin files. [] and {} also for representation of data and types):  
