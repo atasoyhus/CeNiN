@@ -147,7 +147,7 @@ namespace CeNiN
             return t1 + (-f);
         }
 
-        private static bool suit2DBroadcastedSum(Tensor t1, Tensor t2)
+        private static bool dimsAgreeForBrAddition(Tensor t1, Tensor t2)
         {
             if (
                     t1.dims.Length == 2 && t2.dims.Length == 2 &&
@@ -163,8 +163,8 @@ namespace CeNiN
 
         public static Tensor operator +(Tensor t1, Tensor t2)
         {
-            if (suit2DBroadcastedSum(t1, t2))
-                return broadcastedSum(t1, t2);
+            if (dimsAgreeForBrAddition(t1, t2))
+                return broadcastedAddition(t1, t2);
 
             if (!dimsEqual(t1, t2))
                 return null;
@@ -210,7 +210,7 @@ namespace CeNiN
             return t;
         }
 
-        private static Tensor broadcastedSum(Tensor t1, Tensor t2)
+        private static Tensor broadcastedAddition(Tensor t1, Tensor t2)
         {
             int dim1 = t1.totalLength;
             int dim2 = t2.totalLength;
