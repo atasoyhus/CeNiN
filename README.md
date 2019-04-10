@@ -37,7 +37,7 @@ Additionally you can find some function and operator definitions that may be use
 - Tensor * float,
 - Tensor + Tensor, Tensor - Tensor,
 - Tensor + float, Tensor - float
-- broadcasted sum (for rank-1 tensors only)
+- broadcasted addition (for rank-1 tensors only)
 
 ## .cenin File Format
 This file format is structured so that it can be read under .NET framework using BinaryReader class very quickly. The structure is as follows (new lines are for representation, there is no new line in cenin files. [] and {} also for representation of data and types):  
