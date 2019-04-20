@@ -1,5 +1,5 @@
 # CeNiN
-**C**e**N**i**N** (means "fetus" in Turkish) is a minimal implementation of feed-forward phase of deep **C**onvolutional **N**eural **N**etworks in pure C#. It doesn't require any external library and can be used in all programming languages supported by .NET.
+**C**e**N**i**N** (means "fetus" in Turkish) is a minimal implementation of feed-forward phase of deep **C**onvolutional **N**eural **N**etworks in pure C#. It doesn't require any third party library and can be used in all programming languages supported by .NET.
 
 ![CeNiN screenshot](screenshot.png)
 
@@ -7,9 +7,9 @@ There are two examples that illustrate how to use CeNiN in C# and VB.NET. You ca
 
 ## Pretrained Models
 You can download two pretrained CeNiN models. These are actually two of VGG16 models of Oxford Visual Geometry Group. Parameters of those models are stored in ".cenin" files that allow millions of parameters to be loaded into memory quickly under .NET framework.  
-- [imagenet-matconvnet-vgg-f.cenin (19 layers, 60824256  weights)](https://drive.google.com/file/d/12Z0zkcLFMAvReBYomj1thrU-Aj1EJYKZ/view?usp=sharing
+- [imagenet-matconvnet-vgg-f.cenin (19 layers, 60824256  weights, 232MB)](https://drive.google.com/file/d/12Z0zkcLFMAvReBYomj1thrU-Aj1EJYKZ/view?usp=sharing
 )
-- [imagenet-vgg-verydeep-16.cenin (37 layers, 138344128 weights)](https://drive.google.com/file/d/1t3Z3v1D625fByha19avQpNEiJm1AI-fD/view?usp=sharing)
+- [imagenet-vgg-verydeep-16.cenin (37 layers, 138344128 weights, 528MB)](https://drive.google.com/file/d/1t3Z3v1D625fByha19avQpNEiJm1AI-fD/view?usp=sharing)
 
 ## Performance
 The most time-consuming layers are convolution layers. The other layers are fast enough without extra optimization.  
@@ -49,7 +49,7 @@ CeNiN NEURAL NETWORK FILE   {string without an ending null char}
 For each layer in network:
 [LayerTypeStringLength]     {1 x byte (7-bit encoded int)}
 [LayerType]                 {string}
-[LayerParams]               {different numbers of params in different orders, please see CNN() constructor in CNN.cs}
+[LayerParams]               {different numbers of parameters in different orders, please see CNN() constructor in CNN.cs}
 EOF                         {string without an ending null char}
 ```
 
