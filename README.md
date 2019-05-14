@@ -6,7 +6,7 @@
 There are two examples that illustrate how to use CeNiN in C# and VB.NET. You can find another one [here (**ImageTagger**)](https://www.codeproject.com/Articles/1360649/Image-Tagger-A-Convolutional-Neural-Network-Based).
 
 ## Pretrained Models
-You can download two pretrained CeNiN models. These are actually two of VGG16 models of Oxford Visual Geometry Group. Parameters of those models are stored in ".cenin" files that allow millions of parameters to be loaded into memory quickly under .NET framework.  
+You can download two pretrained CeNiN models. These are actually two of VGG models of Oxford Visual Geometry Group. Parameters of those models are stored in ".cenin" files that allow millions of parameters to be loaded into memory quickly under .NET framework.  
 - [imagenet-matconvnet-vgg-f.cenin (19 layers, 60824256  weights, 232MB)](https://drive.google.com/file/d/12Z0zkcLFMAvReBYomj1thrU-Aj1EJYKZ/view?usp=sharing
 )
 - [imagenet-vgg-verydeep-16.cenin (37 layers, 138344128 weights, 528MB)](https://drive.google.com/file/d/1t3Z3v1D625fByha19avQpNEiJm1AI-fD/view?usp=sharing)
@@ -52,6 +52,8 @@ For each layer in network:
 [LayerParams]               {different numbers of parameters in different orders, please see CNN() constructor in CNN.cs}
 EOF                         {string without an ending null char}
 ```
+### vgg2cenin
+A matlab function ([vgg2cenin](https://github.com/atasoyhus/CeNiN/blob/master/src/Converter/vgg2cenin.m)) that converts vgg format to cenin format is added under /src/Converter (14/05/2019).
 
 ## Links
 - The paper that proposes a faster convolution approach (used in *Conv_2*, *Conv_3* and *Conv*):  
