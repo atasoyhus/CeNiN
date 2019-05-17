@@ -147,7 +147,7 @@ namespace CeNiN
             return t1 + (-f);
         }
 
-        private static bool dimsAgreeForBrAddition(Tensor t1, Tensor t2)
+        public static Tensor operator +(Tensor t1, Tensor t2)
         {
             if (
                     t1.dims.Length == 2 && t2.dims.Length == 2 &&
@@ -156,14 +156,6 @@ namespace CeNiN
                         (t1.dims[1] == 1 && t2.dims[0] == 1)
                     )
                 )
-                return true;
-
-            return false;
-        }
-
-        public static Tensor operator +(Tensor t1, Tensor t2)
-        {
-            if (dimsAgreeForBrAddition(t1, t2))
                 return broadcastedAddition(t1, t2);
 
             if (!dimsEqual(t1, t2))
