@@ -20,7 +20,7 @@ Below are the times taken to pass an image from all the layers of imagenet-matco
 ***Conv*:** 1031 ms - The only difference between this and *Conv_3* is parallelization. This is faster than *Conv_3* only on multicore CPUs. A faster generalized matrix multiplication approach can make it even faster...  
 ***Conv* (useMKLCBLAS=true):** 151 ms - with Intel MKL BLAS support
 
-## Intel MKL Support (26/05/2019)
+### Intel MKL Support (26/05/2019)
 As of version 0.2 CeNiN supports using the Intel MKL library to speed up matrix multiplications if the following files are available in the same folder as CeNiN.dll:  
   - mkl_rt.dll,
   - mkl_intel_thread.dll
@@ -32,6 +32,7 @@ As of version 0.2 CeNiN supports using the Intel MKL library to speed up matrix 
   - mkl_avx512.dll
   - mkl_mc.dll
   - mkl_mc3.dll
+
 These files can be found in "?:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2019.3.203\windows\redist\intel64_win\mkl" after installing the Intel® Math Kernel Library from [this link](https://software.intel.com/en-us/mkl/choose-download).
 
 ## Training Your Own Models
