@@ -70,7 +70,7 @@ namespace CeNiN
             for (int i = 0; i < mCountW; i += stride[1])
                 possibleW.memPtr[j++] = i;
 
-            Tensor startingindexes = possibleW + possibleH * inputWidth;
+            Tensor startingIndexes = possibleW + possibleH * inputWidth;
             possibleH.Dispose();
             possibleW.Dispose();
 
@@ -87,10 +87,10 @@ namespace CeNiN
             possibleH.Dispose();
             possibleW.Dispose();
 
-            startingindexes.reshape(new int[] { startingindexes.TotalLength, 1 });
+            startingIndexes.reshape(new int[] { startingIndexes.TotalLength, 1 });
             offsets.reshape(new int[] { 1, offsets.TotalLength });
-            Tensor allindexes = startingindexes + offsets;
-            startingindexes.Dispose();
+            Tensor allIndexes = startingIndexes + offsets;
+            startingIndexes.Dispose();
             offsets.Dispose();
 
             int outputH_W = outputDims[0] * outputDims[1];
@@ -113,13 +113,13 @@ namespace CeNiN
                     {
                         aioInd[1] = ch * fH_fW + m;
                         aiInd[1] = m;
-                        tmp = (int)allindexes[aiInd] + h_W * ch;
+                        tmp = (int)allIndexes[aiInd] + h_W * ch;
                         allInOne[aioInd] = inputTensor.memPtr[tmp];
                     }
                 }
             }
 
-            allindexes.Dispose();
+            allIndexes.Dispose();
 
             nextLayer.inputTensor.reshape(new int[] { allInOne.Dimensions[0], filterCount });
 

@@ -34,6 +34,8 @@ namespace CeNiN
         public Tensor weights;
         public Tensor biases;
 
+        public bool useCBLAS = false;
+
         public Conv(int[] inputTensorDims, int[] pad) : base(inputTensorDims, pad)
         {
             type = "Convolution";
@@ -71,7 +73,7 @@ namespace CeNiN
             for (int i = 0; i < mCountW; i += stride[1])
                 possibleW.memPtr[j++] = i;
 
-            Tensor startingindexes = possibleW + possibleH * inputWidth;
+            Tensor startingIndexes = possibleW + possibleH * inputWidth;
             possibleH.Dispose();
             possibleW.Dispose();
 
@@ -88,10 +90,10 @@ namespace CeNiN
             possibleH.Dispose();
             possibleW.Dispose();
 
-            startingindexes.reshape(new int[] { startingindexes.TotalLength, 1 });
+            startingIndexes.reshape(new int[] { startingIndexes.TotalLength, 1 });
             offsets.reshape(new int[] { 1, offsets.TotalLength });
-            Tensor allindexes = startingindexes + offsets;
-            startingindexes.Dispose();
+            Tensor allIndexes = startingIndexes + offsets;
+            startingIndexes.Dispose();
             offsets.Dispose();
 
             int outputH_W = outputDims[0] * outputDims[1];
@@ -101,56 +103,99 @@ namespace CeNiN
             int h_W = inputHeight * inputWidth;
             int fH_fW = filterHeight * filterWidth;
             int h_w_fH_fW = h_W * fH_fW;
-            int[] aiInd = new int[] { 0, 0 };
-            int[] aioInd = new int[] { 0, 0 };
             int tmp;
+
+            //int[] aiInd = new int[] { 0, 0 };
+            //int[] aioInd = new int[] { 0, 0 };
+            //for (int ch = 0; ch < channelCount; ch++)
+            //{
+            //    for (int k = 0; k < outputH_W; k++)
+            //    {
+            //        aioInd[0] = k;
+            //        aiInd[0] = k;
+            //        for (int m = 0; m < fH_fW; m++)
+            //        {
+            //            aioInd[1] = ch * fH_fW + m;
+            //            aiInd[1] = m;
+            //            tmp = (int)allIndexes[aiInd] + h_W * ch;
+            //            allInOne[aioInd] = inputTensor.memPtr[tmp];
+            //        }
+            //    }
+            //}
+
+            // A bit faster:
+            int aiInd, aioInd;
             for (int ch = 0; ch < channelCount; ch++)
             {
-                for (int k = 0; k < outputH_W; k++)
+                int fH_fW_ch = fH_fW * ch;
+                int h_W_ch = h_W * ch;
+                for (int m = 0; m < fH_fW; m++)
                 {
-                    aioInd[0] = k;
-                    aiInd[0] = k;
-                    for (int m = 0; m < fH_fW; m++)
+                    aiInd = m * outputH_W;
+                    aioInd = (fH_fW_ch + m) * outputH_W;
+                    for (int k = 0; k < outputH_W; k++)
                     {
-                        aioInd[1] = ch * fH_fW + m;
-                        aiInd[1] = m;
-                        tmp = (int)allindexes[aiInd] + h_W * ch;
-                        allInOne[aioInd] = inputTensor.memPtr[tmp];
+                        tmp = (int)allIndexes.memPtr[aiInd++] + h_W_ch;
+                        allInOne.memPtr[aioInd++] = inputTensor.memPtr[tmp];
                     }
                 }
             }
 
-            allindexes.Dispose();
+            allIndexes.Dispose();
 
             nextLayer.inputTensor.reshape(new int[] { allInOne.Dimensions[0], filterCount });
 
-            int x = allInOne.Dimensions[1];
-            int y = filterCount;
-            int z = allInOne.Dimensions[0];
+            if (useCBLAS)
+            {
+                weights.reshape(new int[] { filterHeight * filterWidth * channelCount, filterCount });
 
-            ParallelOptions po = new ParallelOptions();
-            po.MaxDegreeOfParallelism = Environment.ProcessorCount;
+                //for (int i = 0; i < nextLayer.inputTensor.Dimensions[0]; i++)
+                //    for (int u = 0; u < biases.Dimensions[0]; u++)
+                //        nextLayer.inputTensor[i,u] = biases.memPtr[u];
 
-            Parallel.For(0, y, po, f =>
-              {
-                  int aioInd_;
-                  int outputInd_;
-                  int weightsInd_;
+                int u = 0;
+                int q = 0;
+                for (int i = 0; i < nextLayer.inputTensor.Dimensions[1]; i++)
+                {
+                    float f = biases.memPtr[u++];
+                    for (int p = 0; p < nextLayer.inputTensor.Dimensions[0]; p++)
+                        nextLayer.inputTensor.memPtr[q++] = f;
+                }
 
-                  for (int g = 0; g < z; g++)
-                  {
-                      float sum = 0;
-                      for (int h = 0; h < x; h++)
-                      {
-                          aioInd_ = h * z + g;
-                          weightsInd_ = f * x + h;
-                          sum += weights.memPtr[weightsInd_] * allInOne.memPtr[aioInd_];
-                      }
-                      outputInd_ = f * z + g;
-                      nextLayer.inputTensor.memPtr[outputInd_] = sum + biases.memPtr[f];
-                  }
-              });
+                nextLayer.inputTensor.GEMM(allInOne, weights, 1.0f, 1.0f);
 
+                weights.reshape(new int[] { filterHeight, filterWidth, channelCount, filterCount });
+            }
+            else
+            {
+                int x = allInOne.Dimensions[1];
+                int y = filterCount;
+                int z = allInOne.Dimensions[0];
+
+                ParallelOptions po = new ParallelOptions();
+                po.MaxDegreeOfParallelism = Environment.ProcessorCount;
+
+                Parallel.For(0, y, po, f =>
+                {
+                    int aioInd_;
+                    int outputInd_;
+                    int weightsInd_;
+
+                    for (int g = 0; g < z; g++)
+                    {
+                        float sum = 0;
+                        for (int h = 0; h < x; h++)
+                        {
+                            aioInd_ = h * z + g;
+                            weightsInd_ = f * x + h;
+                            sum += weights.memPtr[weightsInd_] * allInOne.memPtr[aioInd_];
+                        }
+                        outputInd_ = f * z + g;
+                        nextLayer.inputTensor.memPtr[outputInd_] = sum + biases.memPtr[f];
+                    }
+                });
+            }
+            
             nextLayer.inputTensor.reshape(outputDims);
 
             allInOne.Dispose();

@@ -13,10 +13,26 @@ You can download two pretrained CeNiN models. These are actually two of VGG mode
 
 ## Performance
 The most time-consuming layers are convolution layers. The other layers are fast enough without extra optimization.  
-***Conv_1*:** It takes more than 1 minute to pass an image through all the layers.  
-***Conv_2*:** I used the approach explained in a paper by Nvidia (no, not using GPUs :D). It is not much faster than the first one because of the indexing approach that I used in *Tensor* class.  
-***Conv_3*:** The same as *Conv_2*, but this time with non-repetitive linear indexing. This is more than 100 times faster than the first implementation.  
-***Conv*:** The only difference between this and *Conv_3* is parallelization. This is faster than *Conv_3* only on multicore CPUs. It takes no more than 1-2 seconds to pass an image through all the layers using *Conv* or *Conv_3* on a single CPU core. A faster generalized matrix multiplication approach can make it even faster...
+Below are the times taken to pass an image from all the layers of imagenet-matconvnet-vgg-f.cenin on Intel Core i7-6500U CPU 2.50GHz and 8GB RAM:  
+***Conv_1*:** 7548 ms - The simplest implementation  
+***Conv_2*:** 6763 ms - I used the approach explained in a paper by Nvidia (no, not using GPUs :D). It is not much faster than the first one because of the indexing approach that I used in *Tensor* class.  
+***Conv_3*:** 1975 ms - The same as *Conv_2*, but this time with non-repetitive multiplications while indexing.  
+***Conv*:** 1031 ms - The only difference between this and *Conv_3* is parallelization. This is faster than *Conv_3* only on multicore CPUs. A faster generalized matrix multiplication approach can make it even faster...  
+***Conv* (useMKLCBLAS=true):** 151 ms - with Intel MKL BLAS support
+
+## Intel MKL Support (26/05/2019)
+As of version 0.2 CeNiN supports using the Intel MKL library to speed up matrix multiplications if the following files are available in the same folder as CeNiN.dll:  
+  - mkl_rt.dll,
+  - mkl_intel_thread.dll
+  - mkl_core.dll
+  - libiomp5md.dll
+  - mkl_def.dll
+  - mkl_avx.dll
+  - mkl_avx2.dll
+  - mkl_avx512.dll
+  - mkl_mc.dll
+  - mkl_mc3.dll
+These files can be found in "?:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2019.3.203\windows\redist\intel64_win\mkl" after installing the Intel® Math Kernel Library from [this link](https://software.intel.com/en-us/mkl/choose-download).
 
 ## Training Your Own Models
 Since backpropagation is not implemented yet, you can not train a model using this library. But if you have a trained model or want to train a model with another tool (like matconvnet) you can easily convert your trained model to a cenin file. CeNiN file structure is presented below. But there are some limitations because the implementation was kept as minimal as possible. (implemented layers: convolution, pool (max pooling only), relu, softmax)
@@ -63,6 +79,8 @@ http://www.vlfeat.org/matconvnet/pretrained/
 - Visual Geometry Group (VGG)  
 http://www.robots.ox.ac.uk/~vgg/
 - The method that I used in *InputLayer* to read a bitmap quickly [in Turkish]:  
-http://huseyinatasoy.com/Bitmapleri-Net-Catisi-Altinda-Hizlica-Isleme
+http://www.atasoyweb.net/Bitmapleri-Net-Catisi-Altinda-Hizlica-Isleme
 - My blog post about this library [in Turkish]:  
-http://huseyinatasoy.com/CeNiN-Konvolusyonel-Yapay-Sinir-Agi-Kutuphanesi
+http://www.atasoyweb.net/CeNiN-Konvolusyonel-Yapay-Sinir-Agi-Kutuphanesi
+- My blog post about BLAS [in Turkish]:  
+http://www.atasoyweb.net/MATLAB-in-Sihirli-Degnegi-BLAS

@@ -46,6 +46,11 @@ namespace CeNiN
 
         public CNN(string path)
         {
+            bool useMKLBLAS = MKLCBLAS.isAvailable();
+
+            //if(useMKLCBLAS)
+            //    MKLCBLAS.setNumThreads(Environment.ProcessorCount);
+
             FileStream f = null;
             BinaryReader br = null;
             try
@@ -90,6 +95,7 @@ namespace CeNiN
                         
                         int[] inputTensorDims = currentLayer.outputDims;
                         Conv cLayer = new Conv(inputTensorDims, pad);
+                        cLayer.useCBLAS = useMKLBLAS;
 
                         int[] dims = new int[4];
                         for (int i = 0; i < 4; i++)
