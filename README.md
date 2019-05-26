@@ -13,8 +13,8 @@ You can download two pretrained CeNiN models. These are actually two of VGG mode
 
 ## Performance
 The most time-consuming layers are convolution layers. The other layers are fast enough without extra optimization.  
-Below are the times taken to pass an image from all the layers of imagenet-matconvnet-vgg-f.cenin on Intel Core i7-6500U CPU 2.50GHz and 8GB RAM:  
-***Conv_1*:** 7548 ms - The simplest implementation  
+Below are the times taken to pass an image from all the layers of imagenet-matconvnet-vgg-f.cenin on Intel Core i7-6500U 2.50GHz CPU and 8GB RAM:  
+***Conv_1*:** 7548 ms - The first and simplest implementation  
 ***Conv_2*:** 6763 ms - I used the approach explained in a paper by Nvidia (no, not using GPUs :D). It is not much faster than the first one because of the indexing approach that I used in *Tensor* class.  
 ***Conv_3*:** 1975 ms - The same as *Conv_2*, but this time with non-repetitive multiplications while indexing.  
 ***Conv*:** 1031 ms - The only difference between this and *Conv_3* is parallelization. This is faster than *Conv_3* only on multicore CPUs. A faster generalized matrix multiplication approach can make it even faster...  
