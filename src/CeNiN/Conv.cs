@@ -153,16 +153,15 @@ namespace CeNiN
                 //    for (int u = 0; u < biases.Dimensions[0]; u++)
                 //        nextLayer.inputTensor[i,u] = biases.memPtr[u];
 
-                int u = 0;
                 int q = 0;
                 for (int i = 0; i < nextLayer.inputTensor.Dimensions[1]; i++)
                 {
-                    float f = biases.memPtr[u++];
+                    float f = biases.memPtr[i];
                     for (int p = 0; p < nextLayer.inputTensor.Dimensions[0]; p++)
                         nextLayer.inputTensor.memPtr[q++] = f;
                 }
 
-                nextLayer.inputTensor.GEMM(allInOne, weights, 1.0f, 1.0f);
+                nextLayer.inputTensor.GeMM(allInOne, weights, 1.0f, 1.0f);
 
                 weights.reshape(new int[] { filterHeight, filterWidth, channelCount, filterCount });
             }

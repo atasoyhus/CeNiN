@@ -37,7 +37,7 @@ namespace CeNiN
 
         private int[] dimProds;
 
-        public static bool useMKLCBLAS_GEMM = false;
+        public static bool useMKLCBLAS_GeMM = false;
 
         public int TotalLength
         {
@@ -179,7 +179,7 @@ namespace CeNiN
             return t;
         }
 
-        public void GEMM(Tensor A, Tensor B, float alpha, float beta)
+        public void GeMM(Tensor A, Tensor B, float alpha, float beta)
         {
             int m = A.Dimensions[0];
             int n = B.Dimensions[1];
@@ -203,9 +203,9 @@ namespace CeNiN
 
             Tensor t = new Tensor(new int[] { t1.dims[0], t2.dims[1] });
 
-            if (useMKLCBLAS_GEMM)
+            if (useMKLCBLAS_GeMM)
             {
-                t.GEMM(t1, t2, 1, 0);
+                t.GeMM(t1, t2, 1, 0);
                 return t;
             }
 

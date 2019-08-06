@@ -67,7 +67,6 @@ namespace CeNiN
                     inputSize[i] = br.ReadInt32();
 
                 inputLayer = new Input(inputSize);
-                inputLayer.layerCount = layerCount;
 
                 for (int i = 0; i < 3; i++)
                     inputLayer.avgPixel[i] = br.ReadSingle();

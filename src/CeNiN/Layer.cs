@@ -41,7 +41,7 @@ namespace CeNiN
         public bool paddedWriting;
         public int[] pad;
 
-        public Tensor inputTensor;
+        public Tensor inputTensor = null;
         public Layer nextLayer;
 
         public void writeNextLayerInput(int[] indexes, float value)
@@ -98,6 +98,7 @@ namespace CeNiN
         public void disposeInputTensor()
         {
             inputTensor.Dispose();
+            inputTensor = null;
         }
 
         public void appendNext(Layer nextLayer)

@@ -29,7 +29,6 @@ namespace CeNiN
 {
     public unsafe class Input : Layer
     {
-        public int layerCount;
         public int[] inputSize;
         public float[] avgPixel;
 
@@ -62,9 +61,7 @@ namespace CeNiN
 
         private Bitmap resizeBitmap(Bitmap b, ResizingMethod resizingMethod)
         {
-            int[] inputSize = new int[] { 224, 224 };
-
-            Bitmap resizedBmp = new Bitmap(224, 224, PixelFormat.Format24bppRgb);
+            Bitmap resizedBmp = new Bitmap(inputSize[1], inputSize[0], PixelFormat.Format24bppRgb);
             Graphics gr = Graphics.FromImage(resizedBmp);
 
             if (resizingMethod == ResizingMethod.Stretch)
