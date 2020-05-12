@@ -18,7 +18,7 @@ Below are the times taken to pass an image from all the layers of imagenet-matco
 ***Conv_2*:** 6763 ms - I used the approach explained in a paper by Nvidia (no, not using GPUs :D). It is not much faster than the first one because of the indexing approach that I used in *Tensor* class.  
 ***Conv_3*:** 1975 ms - The same as *Conv_2*, but this time with non-repetitive multiplications while indexing.  
 ***Conv*:** 1031 ms - The only difference between this and *Conv_3* is parallelization. This is faster than *Conv_3* only on multicore CPUs. A faster generalized matrix multiplication approach can make it even faster...  
-***Conv* (useMKLCBLAS=true):** 151 ms - with Intel MKL BLAS support
+***Conv* (useCBLAS=true):** 151 ms - with BLAS support
 
 ### Intel MKL Support (26/05/2019)
 As of version 0.2 CeNiN supports using the Intel MKL library to speed up matrix multiplications if the following files are available in the same folder as CeNiN.dll:  
