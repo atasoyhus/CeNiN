@@ -36,7 +36,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CeNiN, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="CeNiN, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\CeNiN.dll</HintPath>
     </Reference>

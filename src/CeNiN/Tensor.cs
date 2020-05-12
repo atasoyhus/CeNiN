@@ -37,7 +37,7 @@ namespace CeNiN
 
         private int[] dimProds;
 
-        public static bool useMKLCBLAS_GeMM = false;
+        public static bool useCBLAS_GeMM = false;
 
         public int TotalLength
         {
@@ -186,10 +186,10 @@ namespace CeNiN
             int k = A.Dimensions[1];
             int lda = m, ldb = k, ldc = m;
 
-            MKLCBLAS.cblas_sgemm(
-                MKLCBLAS.Order.ColMajor,
-                MKLCBLAS.Transpose.None,
-                MKLCBLAS.Transpose.None,
+            CBLAS.sGeMM(
+                CBLAS.Order.ColMajor,
+                CBLAS.Transpose.None,
+                CBLAS.Transpose.None,
                 m, n, k,
                 alpha, A.memPtr, lda,
                 B.memPtr, ldb,
@@ -203,7 +203,7 @@ namespace CeNiN
 
             Tensor t = new Tensor(new int[] { t1.dims[0], t2.dims[1] });
 
-            if (useMKLCBLAS_GeMM)
+            if (useCBLAS_GeMM)
             {
                 t.GeMM(t1, t2, 1, 0);
                 return t;

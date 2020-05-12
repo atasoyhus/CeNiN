@@ -47,13 +47,12 @@ namespace CeNiN_CSharp_Example
             if (opf.ShowDialog() != DialogResult.OK) return;
 
             textBox1.Clear();
-            prependLine("Parsing CeNiN file...");
+            prependLine("Loading CeNiN file...");
             Application.DoEvents();
             tic();
             cnn = new CNN(opf.FileName);
-            prependLine("Neural network loaded sucesfully in " + toc() + " seconds.");
             prependLine(cnn.layerCount + "+2 layers, "
-                    + cnn.totalWeightCount + " weights and"
+                    + cnn.totalWeightCount + " weights and "
                     + cnn.totalBiasCount + " biases were loaded in "
                     + toc() + " seconds.");
 
@@ -113,6 +112,13 @@ namespace CeNiN_CSharp_Example
         private void prependLine(string text, string prefix = "-->  ")
         {
             textBox1.Text = prefix + text + "\r\n" + textBox1.Text;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            CBLAS.detectCBLAS();
+            prependLine("OpenBLAS: " + (CBLAS.openbAvailable ? "" : "not ") + "available");
+            prependLine("Intel MKL: " + (CBLAS.imklAvailable ? "" : "not ") + "available");
         }
     }
 }

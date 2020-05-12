@@ -44,7 +44,7 @@
     <Compile Include="Conv.cs" />
     <Compile Include="Input.cs" />
     <Compile Include="Layer.cs" />
-    <Compile Include="MKLCBLAS.cs" />
+    <Compile Include="CBLAS.cs" />
     <Compile Include="Output.cs" />
     <Compile Include="Pool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -32,12 +32,12 @@ Public Class Form1
         OPF.Filter = "CeNiN file|*.cenin"
         If OPF.ShowDialog() <> DialogResult.OK Then Return
         TextBox1.Clear()
-        PrependLine("Parsing CeNiN file...")
+        PrependLine("Loading CeNiN file...")
         Application.DoEvents()
         Tic()
         cnn = New CNN(OPF.FileName)
         PrependLine(cnn.layerCount & "+2 layers, " _
-                & cnn.totalWeightCount & " weights and" _
+                & cnn.totalWeightCount & " weights and " _
                 & cnn.totalBiasCount & " biases were loaded in " _
                 & Toc() & " seconds.")
         Button2.Enabled = True
@@ -96,5 +96,11 @@ Public Class Form1
 
     Private Sub PrependLine(ByVal Text As String, ByVal Optional Prefix As String = "-->  ")
         TextBox1.Text = Prefix & Text & vbCrLf & TextBox1.Text
+    End Sub
+
+    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        CBLAS.detectCBLAS()
+        PrependLine("OpenBLAS: " & IIf(CBLAS.openbAvailable, "", "not ") & "available")
+        PrependLine("Intel MKL: " & IIf(CBLAS.imklAvailable, "", "not ") & "available")
     End Sub
 End Class

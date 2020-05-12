@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 /*
  *--------------------------------------------------------------------------
- * CeNiN > MKLCBLAS.cs
+ * CeNiN > CBLAS.cs
  *--------------------------------------------------------------------------
  * CeNiN; a convolutional neural network implementation in pure C#
  * Huseyin Atasoy
@@ -27,48 +27,98 @@ using System.Runtime.InteropServices;
 
 namespace CeNiN
 {
-    public unsafe class MKLCBLAS
+    public unsafe class CBLAS
     {
-        [DllImport("mkl_rt.dll", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void cblas_sgemm(
-            int order, 
-            int transA, 
-            int transB,
-            int m, 
-            int n,
-            int k,
-            float alpha,
-            float* A,
-            int lda, 
-            float* B, int ldb,
-            float beta, 
-            float* C,
-            int ldc
-        );
+        private static bool libsScanned = false;
+
+        public static bool imklAvailable = false;
+        public static bool openbAvailable = false;
+
+        [DllImport("openblas.dll", EntryPoint = "cblas_sgemm", CallingConvention = CallingConvention.StdCall)]
+        private static extern void openblas_cblas_sgemm(int order, int transA, int transB, int m, int n, int k, float alpha, float* A, int lda, float* B, int ldb, float beta, float* C, int ldc);
+
+        [DllImport("mkl_rt.dll", EntryPoint = "cblas_sgemm", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void imkl_cblas_sgemm(int order, int transA, int transB, int m, int n, int k, float alpha, float* A, int lda, float* B, int ldb, float beta, float* C, int ldc);
+
+        public static bool detectCBLAS()
+        {
+            if (!libsScanned)
+            {
+                if (isOBLASAvailable())
+                    openbAvailable = true;
+                if (isIMKLAvailable())
+                    imklAvailable = true;
+
+                libsScanned = true;
+            }
+            return openbAvailable || imklAvailable;
+        }
+
+        public static void sGeMM(int order, int transA, int transB, int m, int n, int k, float alpha, float* A, int lda, float* B, int ldb, float beta, float* C, int ldc)
+        {
+            if (!libsScanned)
+                detectCBLAS();
+            if (openbAvailable)
+                openblas_cblas_sgemm(order, transA, transB, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+            else if (imklAvailable)
+                imkl_cblas_sgemm(order, transA, transB, m, n, k, alpha, A, lda, B, ldb, beta, C, ldc);
+        }
+
+        [DllImport("openblas.dll", CallingConvention = CallingConvention.Cdecl)]
+        private static extern void openblas_set_num_threads(int n);
+
+        [DllImport("openblas.dll", CallingConvention = CallingConvention.Cdecl)]
+        private static extern int openblas_get_num_threads();
 
         [DllImport("mkl_rt.dll", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void mkl_set_dynamic(int* d);
+        private static extern void mkl_set_dynamic(int* d);
 
         [DllImport("mkl_rt.dll", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void mkl_set_num_threads(int* n);
+        private static extern void mkl_set_num_threads(int* n);
 
         [DllImport("mkl_rt.dll", CallingConvention = CallingConvention.Cdecl)]
-        internal static extern int mkl_get_max_threads();
+        private static extern int mkl_get_max_threads();
 
         public static void setNumThreads(int n)
         {
             int i = 0;
-            mkl_set_dynamic(&i); // Disables dynamic adjustment of the number of threads...
-            mkl_set_num_threads(&n);
+
+            if (openbAvailable)
+                openblas_set_num_threads(n);
+            else if (imklAvailable)
+            {
+                mkl_set_dynamic(&i);
+                mkl_set_num_threads(&n);
+            }
         }
 
         public static void setDynamic()
         {
             int i = 1;
-            mkl_set_dynamic(&i);
+            if(imklAvailable)
+                mkl_set_dynamic(&i);
         }
 
-        public static bool isAvailable()
+        public static int getNumThreads()
+        {
+            if (openbAvailable)
+                return openblas_get_num_threads();
+            else if (imklAvailable)
+                return mkl_get_max_threads();
+            return -1;
+        }
+
+        public static bool isOBLASAvailable()
+        {
+            string[] libs = { "openblas.dll", "libgcc_s_seh-1.dll", "libquadmath-0.dll" };
+            for (int i = 0; i < libs.Length; i++)
+                if (!File.Exists(libs[i]))
+                    return false;
+
+            return true;
+        }
+
+        public static bool isIMKLAvailable()
         {
             string[] libs = { "mkl_rt.dll", "mkl_intel_thread.dll", "mkl_core.dll", "libiomp5md.dll", "mkl_def.dll", "mkl_avx.dll", "mkl_avx2.dll", "mkl_avx512.dll", "mkl_mc.dll", "mkl_mc3.dll" };
             for (int i = 0; i < libs.Length; i++)
