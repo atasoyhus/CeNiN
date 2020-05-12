@@ -110,7 +110,7 @@ namespace CeNiN
 
         public static bool isOBLASAvailable()
         {
-            string[] libs = { "openblas.dll", "libgcc_s_seh-1.dll", "libquadmath-0.dll" };
+            string[] libs = { "openblas.dll", "libquadmath-0.dll", "libgfortran-3.dll", "libgcc_s_seh-1.dll" };
             for (int i = 0; i < libs.Length; i++)
                 if (!File.Exists(libs[i]))
                     return false;
