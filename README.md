@@ -22,7 +22,7 @@ Below are the times taken to pass an image from all the layers of imagenet-matco
 
 ### Intel MKL Support (26/05/2019)
 As of version 0.2 CeNiN supports using the Intel MKL library to speed up matrix multiplications if the following files are available in the same folder as CeNiN.dll:  
-  - mkl_rt.dll,
+  - mkl_rt.dll
   - mkl_intel_thread.dll
   - mkl_core.dll
   - libiomp5md.dll
@@ -34,6 +34,15 @@ As of version 0.2 CeNiN supports using the Intel MKL library to speed up matrix 
   - mkl_mc3.dll
 
 These files can be found in "?:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2019.3.203\windows\redist\intel64_win\mkl" after installing the Intel® Math Kernel Library from [this link](https://software.intel.com/en-us/mkl/choose-download).
+
+### OpenBLAS Support (12/05/2020)
+As of version 0.3 CeNiN supports using the [OpenBLAS](https://www.openblas.net/) library to speed up matrix multiplications if the following files are available in the same folder as CeNiN.dll:  
+  - openblas.dll
+  - libquadmath-0.dll
+  - libgfortran-3.dll
+  - libgcc_s_seh-1.dll
+
+The precompiled OpenBLAS library and its dependencies can be found [here](https://github.com/atasoyhus/CeNiN/blob/master/open_blas_x64.zip). Extract dlls to the same folder as CeNiN.dll to use them.
 
 ## Training Your Own Models
 Since backpropagation is not implemented yet, you can not train a model using this library. But if you have a trained model or want to train a model with another tool (like matconvnet) you can easily convert your trained model to a cenin file. CeNiN file structure is presented below. But there are some limitations because the implementation was kept as minimal as possible. (implemented layers: convolution, pool (max pooling only), relu, softmax)
