@@ -5,6 +5,8 @@
 
 There are two examples that illustrate how to use CeNiN in C# and VB.NET. You can find another one [here (**ImageTagger**)](https://www.codeproject.com/Articles/1360649/Image-Tagger-A-Convolutional-Neural-Network-Based).
 
+You can also look at [CNNFET - Convolutional Neural Network Feature Extraction Tools](https://github.com/atasoyhus/CNNFET) which is an application that uses CeNiN to extract features from images using CNNs.
+
 ## Pretrained Models
 You can download two pretrained CeNiN models. These are actually two of VGG models of Oxford Visual Geometry Group. Parameters of those models are stored in ".cenin" files that allow millions of parameters to be loaded into memory quickly under .NET framework.  
 - [imagenet-matconvnet-vgg-f.cenin (19 layers, 60824256  weights, 232MB)](https://drive.google.com/file/d/12Z0zkcLFMAvReBYomj1thrU-Aj1EJYKZ/view?usp=sharing
