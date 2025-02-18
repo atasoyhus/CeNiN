@@ -2,7 +2,7 @@
 **C**e**N**i**N** (means "fetus" in Turkish) is a minimal implementation of feed-forward phase of deep **C**onvolutional **N**eural **N**etworks in pure C#. It doesn't require any third party library and can be used in all programming languages supported by .NET.
 
 You can cite the paper below if you use it in your work:
-> Atasoy, H, Kutlu, Y. (2025). CNNFET: Convolutional neural network feature Extraction Tools. SoftwareX, 30, 102088. https://doi.org/10.1016/j.softx.2025.102088
+> Atasoy, H., & Kutlu, Y. (2025). CNNFET: Convolutional neural network feature Extraction Tools. SoftwareX, 30, 102088. https://doi.org/10.1016/j.softx.2025.102088
 
 ![CeNiN screenshot](screenshot.png)
 
